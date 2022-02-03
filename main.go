@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-    // PARSING CMD OPTIONS
+    // PARSING COMMANDLINE OPTIONS
     size_ptr        := flag.Int(    "size",         i.Defaults.Size,         "sets size of the identicon (range: 4-8)")
     square_ptr      := flag.Bool(   "square",       i.Defaults.Square,       "creates a square identicon")
     border_ptr      := flag.Bool(   "border",       i.Defaults.Border,       "adds a border to the identicon")
@@ -60,4 +60,6 @@ func main() {
     } else {
         m.Print(identicon.Matrix)
     }
+
+    // IMAGE
 }

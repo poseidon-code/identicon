@@ -20,7 +20,7 @@ func Generate(hash string, s int, w, h int, invert bool) [][]int {
             } else {
                 bit = put_value(int(hash[k-1]), 1, 0)
             }
-            
+
             m[i][j] = bit
             k++
         }

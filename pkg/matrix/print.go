@@ -4,7 +4,7 @@ import "fmt"
 
 func Print(m [][]int) {
     w, h := len(m[0]), len(m)
-    
+
     for i:=0; i<h; i++ {
         for j:=0; j<w; j++ {
             if m[i][j] == 0 {
@@ -19,7 +19,7 @@ func Print(m [][]int) {
 
 func PrintBordered(m [][]int) {
     w, h := len(m[0])+4, len(m)+2
-    
+
     p := make([][]string, h)
     for i:=0; i<h; i++ {
         p[i] = make([]string, w)
