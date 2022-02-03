@@ -24,8 +24,11 @@ func main() {
     if len(flag.Args())>1 {
         fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags first before arguments. e.g.: \ngo-identicons --size 8 lovely")
         os.Exit(1)
+    } else if len(flag.Args())==0 {
+        fmt.Println("No argument passed for the text. Use like: \ngo-identicons lovely")
+        os.Exit(1)
     } else {
-        text = flag.Args()[0]
+        text = flag.Arg(0)
     }
 
     // handling type (square|wide)
