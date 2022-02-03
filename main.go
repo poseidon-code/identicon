@@ -14,6 +14,7 @@ func main() {
     square_ptr := flag.Bool("square", false, "creates a square identicon")
     border_ptr := flag.Bool("border", false, "adds a border to the identicon")
     vertical_ptr := flag.Bool("vertical", false, "creates identicon in portrait dimension (not visible on using --square flag)")
+    invert_ptr := flag.Bool("invert", false, "inverts the cell filling of identicon")
     flag.Parse()
 
     // variable declarations
@@ -48,9 +49,9 @@ func main() {
 
     // handling vertical dimension (rather than rotating the entire martrix, only the dimensions are switched)
     if *vertical_ptr {
-        matrix = m.Generate(hash, *size_ptr, H, W)
+        matrix = m.Generate(hash, *size_ptr, H, W, *invert_ptr)
     } else {
-        matrix = m.Generate(hash, *size_ptr, W, H)
+        matrix = m.Generate(hash, *size_ptr, W, H, *invert_ptr)
     }
 
     // handling border (border|no-border)
