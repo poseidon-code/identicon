@@ -18,7 +18,7 @@ func main() {
     // variable declarations
     var text string
     var hash string
-    var W, H *int
+    var W, H int
     
     // handling text
     if len(flag.Args())>1 {
