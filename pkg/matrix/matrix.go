@@ -11,15 +11,17 @@ func Generate(hash string, s int, w, h int, invert bool) [][]int {
         m[i] = make([]int, w)
     }
 
-    k:=1
-
+    var k int = 1
+    var bit int
     for i:=0; i<h; i++ {
         for j:=0; j<w; j++ {
             if invert {
-                m[i][j] = put_value(int(hash[k-1]), 0, 1)
+                bit = put_value(int(hash[k-1]), 0, 1)
             } else {
-                m[i][j] = put_value(int(hash[k-1]), 0, 1)
+                bit = put_value(int(hash[k-1]), 1, 0)
             }
+            
+            m[i][j] = bit
             k++
         }
     }
@@ -34,9 +36,8 @@ func GenerateSymmetric(hash string, s int, w, h int, invert bool) [][]int {
         m[i] = make([]int, w)
     }
 
-    k:=1
+    var k int = 1
     var bit int
-
     for i:=0; i<h; i++ {
         for j:=0; j<w; j++ {
             if j>=w/2+1 {k++; continue}
