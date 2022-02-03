@@ -11,12 +11,12 @@ import (
 
 func main() {
     // PARSING CMD OPTIONS
-    size_ptr        := flag.Int("size", i.Defaults.Size, "sets size of the identicon (range: 4-8)")
-    square_ptr      := flag.Bool("square", i.Defaults.Square, "creates a square identicon")
-    border_ptr      := flag.Bool("border", i.Defaults.Border, "adds a border to the identicon")
-    vertical_ptr    := flag.Bool("vertical", i.Defaults.Vertical, "creates identicon in portrait dimension (not visible on using --square flag)")
-    invert_ptr      := flag.Bool("invert", i.Defaults.Invert, "inverts the cell filling of identicon")
-    symmetric_ptr   := flag.Bool("symmetric", i.Defaults.Symmetric, "creates symmetric identicon")
+    size_ptr        := flag.Int(    "size",         i.Defaults.Size,         "sets size of the identicon (range: 4-8)")
+    square_ptr      := flag.Bool(   "square",       i.Defaults.Square,       "creates a square identicon")
+    border_ptr      := flag.Bool(   "border",       i.Defaults.Border,       "adds a border to the identicon")
+    vertical_ptr    := flag.Bool(   "vertical",     i.Defaults.Vertical,     "creates identicon in portrait dimension (not visible on using --square flag)")
+    invert_ptr      := flag.Bool(   "invert",       i.Defaults.Invert,       "inverts the cell filling of identicon")
+    symmetric_ptr   := flag.Bool(   "symmetric",    i.Defaults.Symmetric,    "creates symmetric identicon")
     flag.Parse()
 
 
@@ -30,10 +30,9 @@ func main() {
         Symmetric:  *symmetric_ptr,
     }
 
-    var identicon i.Identicon
-
 
     // PARSING TEXT & SETTING IDENTICON
+    var identicon i.Identicon
     // handling text
     if len(flag.Args())>1 {
         fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags first before arguments. e.g.: \ngo-identicons --size 8 lovely")
