@@ -13,11 +13,13 @@ func main() {
     size_ptr := flag.Int("size", 5, "sets size of the identicon (range: 4-8)")
     square_ptr := flag.Bool("square", false, "creates a square identicon")
     border_ptr := flag.Bool("border", false, "adds a border to the identicon")
+    vertical_ptr := flag.Bool("vertical", false, "creates identicon in portrait dimension (not visible on using --square flag)")
     flag.Parse()
 
     // variable declarations
     var text string
     var hash string
+    var matrix [][]int
     var W, H int
     
     // handling text
@@ -44,7 +46,12 @@ func main() {
         os.Exit(1)
     }
 
-    matrix := m.Generate(hash, *size_ptr, W, H)
+    // handling vertical dimension (rather than rotating the entire martrix, only the dimensions are switched)
+    if *vertical_ptr {
+        matrix = m.Generate(hash, *size_ptr, H, W)
+    } else {
+        matrix = m.Generate(hash, *size_ptr, W, H)
+    }
 
     // handling border (border|no-border)
     if *border_ptr {
