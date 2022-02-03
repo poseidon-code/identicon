@@ -10,8 +10,9 @@ import (
 )
 
 func main() {
-    size_ptr := flag.Int("size", 5, "sets size of the identicon")
+    size_ptr := flag.Int("size", 5, "sets size of the identicon (range: 4-8)")
     square_ptr := flag.Bool("square", false, "creates a square identicon")
+    border_ptr := flag.Bool("border", false, "adds a border to the identicon")
     flag.Parse()
 
     // variable declarations
@@ -40,8 +41,12 @@ func main() {
         os.Exit(1)
     }
 
-    
     matrix := m.Generate(hash, *size_ptr, W, H)
 
-    m.Print(matrix)
+    // handling border (border|no-border)
+    if *border_ptr {
+        m.PrintBordered(matrix)
+    } else {
+        m.Print(matrix)
+    }
 }
