@@ -5,25 +5,35 @@ import (
 	"fmt"
 	"os"
 
-	h "github.com/poseidon-code/go-identicons/pkg/hash"
+	i "github.com/poseidon-code/go-identicons/pkg/identicon"
 	m "github.com/poseidon-code/go-identicons/pkg/matrix"
 )
 
 func main() {
-    size_ptr := flag.Int("size", 5, "sets size of the identicon (range: 4-8)")
-    square_ptr := flag.Bool("square", false, "creates a square identicon")
-    border_ptr := flag.Bool("border", false, "adds a border to the identicon")
-    vertical_ptr := flag.Bool("vertical", false, "creates identicon in portrait dimension (not visible on using --square flag)")
-    invert_ptr := flag.Bool("invert", false, "inverts the cell filling of identicon")
-    symmetric_ptr := flag.Bool("symmetric", false, "creates symmetric identicon")
+    // PARSING CMD OPTIONS
+    size_ptr        := flag.Int("size", i.Defaults.Size, "sets size of the identicon (range: 4-8)")
+    square_ptr      := flag.Bool("square", i.Defaults.Square, "creates a square identicon")
+    border_ptr      := flag.Bool("border", i.Defaults.Border, "adds a border to the identicon")
+    vertical_ptr    := flag.Bool("vertical", i.Defaults.Vertical, "creates identicon in portrait dimension (not visible on using --square flag)")
+    invert_ptr      := flag.Bool("invert", i.Defaults.Invert, "inverts the cell filling of identicon")
+    symmetric_ptr   := flag.Bool("symmetric", i.Defaults.Symmetric, "creates symmetric identicon")
     flag.Parse()
 
-    // variable declarations
-    var text string
-    var hash string
-    var matrix [][]int
-    var W, H int
-    
+
+    // SETTING OPTIONS
+    var options = i.Configuration{
+        Size:       *size_ptr,
+        Square:     *square_ptr,
+        Border:     *border_ptr,
+        Vertical:   *vertical_ptr,
+        Invert:     *invert_ptr,
+        Symmetric:  *symmetric_ptr,
+    }
+
+    var identicon i.Identicon
+
+
+    // PARSING TEXT & SETTING IDENTICON
     // handling text
     if len(flag.Args())>1 {
         fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags first before arguments. e.g.: \ngo-identicons --size 8 lovely")
@@ -32,43 +42,23 @@ func main() {
         fmt.Println("No argument passed for the text. Use like: \ngo-identicons lovely")
         os.Exit(1)
     } else {
-        text = flag.Arg(0)
-    }
-
-    // handling type (square|wide)
-    if *square_ptr {
-        hash, W, H = h.GenerateSHA256(text)
-    } else {
-        hash, W, H = h.GenerateSHA512(text)
-    }
-
-    // handling size (4-8)
-    if *size_ptr<4 || *size_ptr>8 {
-        fmt.Println("Invalid size passed. \nSize must lie between 4 to 8 (inclusive).")
-        os.Exit(1)
-    }
-
-    // handling vertical dimension (rather than rotating the entire martrix, only the dimensions are switched) (landscape|portrait)
-    // handling cell filling (original|invert)
-    // handling symmetric filling (asymmetric|symmetric)
-    if *vertical_ptr {
-        if *symmetric_ptr {
-            matrix = m.GenerateSymmetric(hash, *size_ptr, H, W, *invert_ptr)
-        } else {
-            matrix = m.Generate(hash, *size_ptr, H, W, *invert_ptr)
-        }
-    } else {
-        if *symmetric_ptr {
-            matrix = m.GenerateSymmetric(hash, *size_ptr, W, H, *invert_ptr)
-        } else {
-            matrix = m.Generate(hash, *size_ptr, W, H, *invert_ptr)
+        // setting Identicon
+        identicon = i.Identicon{
+            Options: options,
+            Text: flag.Arg(0),
         }
     }
 
+
+    // GENERATING IDENTICON
+    identicon.New()
+
+
+    // PRINTING
     // handling border (border|no-border)
-    if *border_ptr {
-        m.PrintBordered(matrix)
+    if identicon.Options.Border {
+        m.PrintBordered(identicon.Matrix)
     } else {
-        m.Print(matrix)
+        m.Print(identicon.Matrix)
     }
 }
