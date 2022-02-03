@@ -47,11 +47,12 @@ func main() {
         os.Exit(1)
     }
 
-    // handling vertical dimension (rather than rotating the entire martrix, only the dimensions are switched)
+    // handling vertical dimension (rather than rotating the entire martrix, only the dimensions are switched) (landscape|portrait)
+    // handling cell filling (original|invert)
     if *vertical_ptr {
-        matrix = m.Generate(hash, *size_ptr, H, W, *invert_ptr)
+        matrix = m.GenerateSymmetric(hash, *size_ptr, H, W, *invert_ptr)
     } else {
-        matrix = m.Generate(hash, *size_ptr, W, H, *invert_ptr)
+        matrix = m.GenerateSymmetric(hash, *size_ptr, W, H, *invert_ptr)
     }
 
     // handling border (border|no-border)
