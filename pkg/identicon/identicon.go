@@ -28,9 +28,9 @@ type Identicon struct {
 func (i *Identicon) New() {
     // handling type (square|wide)
     if i.Options.Square {
-        i.Hash, i.Width, i.Height = h.GenerateSHA256(i.Text)
+        i.Hash, i.Width, i.Height = h.SHA256(i.Text)
     } else {
-        i.Hash, i.Width, i.Height = h.GenerateSHA512(i.Text)
+        i.Hash, i.Width, i.Height = h.SHA512(i.Text)
     }
 
 

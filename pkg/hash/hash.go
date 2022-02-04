@@ -10,13 +10,11 @@ import (
  * SHA256 : 64  = 8:8 or 1:1    (Square)
  * SHA512 : 128 = 16:8 or 2:1   (Rectangle)
  */
- 
-func GenerateSHA256(t string) (hash string, w, h int) {
-    w, h = 1, 1
-    return fmt.Sprintf("%x", sha256.Sum256([]byte(t))), w, h
+
+func SHA256(t string) (string, int, int) {
+    return fmt.Sprintf("%x", sha256.Sum256([]byte(t))), 1, 1
 }
 
-func GenerateSHA512(t string) (hash string, w, h int) {
-    w, h = 2, 1
-    return fmt.Sprintf("%x", sha512.Sum512([]byte(t))), w, h
+func SHA512(t string) (string, int, int) {
+    return fmt.Sprintf("%x", sha512.Sum512([]byte(t))), 2, 1
 }
