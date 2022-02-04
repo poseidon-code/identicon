@@ -1,5 +1,11 @@
 package identicon
 
+import (
+	"encoding/json"
+	"io/ioutil"
+	"os"
+)
+
 /* Configuration
  * these configuration values are set by passing
  * command line arguments, hence, all the flags
@@ -10,12 +16,12 @@ package identicon
  */
 
 type Configuration struct {
-    Size        int     // sets size of the identicon (range: 4-8)
-    Square      bool    // creates a square identicon
-    Border      bool    // adds a border to the identicon
-    Vertical    bool    // creates identicon in portrait dimension (not visible on using --square flag)
-    Invert      bool    // inverts the cell filling of identicon
-    Symmetric   bool    // creates symmetric identicon
+    Size        int     `json:"size"`       // sets size of the identicon (range: 4-8)
+    Square      bool    `json:"square"`     // creates a square identicon
+    Border      bool    `json:"border"`     // adds a border to the identicon
+    Vertical    bool    `json:"vertical"`   // creates identicon in portrait dimension (not visible on using --square flag)
+    Invert      bool    `json:"invert"`     // inverts the cell filling of identicon
+    Symmetric   bool    `json:"symmetric"`  // creates symmetric identicon
 }
 
 // default configuration values for Identicon.Options
@@ -26,4 +32,11 @@ var Defaults = Configuration{
     Vertical:   false,
     Invert:     false,
     Symmetric:  false,
+}
+
+func (o *Configuration) ReadConfiguration(path string) {
+    f, _ := os.Open(path); defer f.Close()
+    b, _ := ioutil.ReadAll(f)
+    *o = Defaults
+    json.Unmarshal(b, &o)
 }
