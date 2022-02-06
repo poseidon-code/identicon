@@ -1,0 +1,8 @@
+{
+    "size": 4,
+    "square": true,
+    "border": true,
+    "vertical": false,
+    "invert": false,
+    "symmetric": true
+}
