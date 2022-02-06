@@ -30,7 +30,9 @@ func main() {
         // handle json configs
         if flag.NFlag()>1 {
             fmt.Println("When --config is passed, all other options will be discarded.")
-        } else if _, err := os.Stat(*config_ptr); err != nil {
+        }
+        
+        if _, err := os.Stat(*config_ptr); err != nil {
             if os.IsNotExist(err) {
                 fmt.Println("Invalid file path : ", *config_ptr)
                 os.Exit(1)
