@@ -2,6 +2,23 @@ package identicon
 
 import "fmt"
 
+/* TERMINAL PRINTING
+ * handles:
+ *      --border flag (no-border|border)
+ *
+ * `Options.Size` is used to determine the size of the identicon, as
+ * `Width` & `Height` are just ratios of the dimensions.
+ * overall width & height of the identicon to be printed is calculated
+ * by multiplying the ratio to the size.
+ * (i.e.: i.Width*i.Options.Size, and same for i.Height)
+ *
+ * IMPORTANT: It is required to have all the fields of struct `Identicon` be filled
+ * i.e. Identicon.New() should be called first.
+ *
+ * NOTE : The size can also be extracted from the `Matrix` directly
+ * (i.e width = len(i.Matrix[0]) & height = len(i.Matrix))
+ */
+
 func (i *Identicon) Print() {
     w, h := (i.Width*i.Options.Size), (i.Height*i.Options.Size)
     m := i.Matrix

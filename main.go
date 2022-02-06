@@ -25,8 +25,8 @@ func main() {
 
     // SETTING OPTIONS
     var options i.Configuration
+    // handle json configs
     if len(*config_ptr)>0 {
-        // handle json configs
         if flag.NFlag()>1 {
             fmt.Println("When --config is passed, all other options will be discarded.")
         }
@@ -73,7 +73,7 @@ func main() {
     // GENERATING IDENTICON
     identicon.New()
     // variable `identicon` will now have all the required values for further 
-    // operation on it, like printing or saving image, etc
+    // operation on it, like printing or saving image, etc.
 
 
     // PRINTING
