@@ -6,7 +6,6 @@ import (
 	"os"
 
 	i "github.com/poseidon-code/go-identicons/pkg/identicon"
-	m "github.com/poseidon-code/go-identicons/pkg/matrix"
 )
 
 func main() {
@@ -31,7 +30,7 @@ func main() {
         if flag.NFlag()>1 {
             fmt.Println("When --config is passed, all other options will be discarded.")
         }
-        
+
         if _, err := os.Stat(*config_ptr); err != nil {
             if os.IsNotExist(err) {
                 fmt.Println("Invalid file path : ", *config_ptr)
@@ -78,10 +77,5 @@ func main() {
 
 
     // PRINTING
-    // handling border (border|no-border)
-    if identicon.Options.Border {
-        m.PrintBordered(identicon.Matrix)
-    } else {
-        m.Print(identicon.Matrix)
-    }
+    identicon.Print()
 }
