@@ -107,11 +107,7 @@ func (i *Identicon) Save() {
         for _, v := range br {
             for x:=v[0]; x<v[1]; x++ {
                 for y:=v[2]; y<v[3]; y++ {
-                    if i.Options.Vertical {
-                        img.Set(y+offset_w, x+offset_h, fg)
-                    } else {
-                        img.Set(x+offset_w, y+offset_h, fg)
-                    }
+                    img.Set(x+offset_w, y+offset_h, fg)
                 }
             }
         }
