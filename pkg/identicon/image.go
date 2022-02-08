@@ -75,8 +75,14 @@ func get_block_size(i Identicon, w, rw int) int {
     }
 
     if i.Options.Square {
-        if !i.Options.Vertical {
+        if i.ImageOptions.Portrait && i.Options.Vertical {
             b = w/rw/5
+        } else if i.Options.Vertical {
+            b = w/rw/10
+        } else if i.ImageOptions.Portrait {
+            b = w/rw/5
+        } else {
+            b = w/rw/10
         }
     }
 
@@ -87,21 +93,17 @@ func get_block_size(i Identicon, w, rw int) int {
 func (i *Identicon) Save() {
     w, h := get_size(i.ImageOptions.Size)
     rw, rh := (i.Width*i.Options.Size), (i.Height*i.Options.Size)
-    if i.Options.Vertical {
-        rw, rh = rh, rw
-    }
-    if i.ImageOptions.Portrait {
-        w, h = h, w
-    }
 
+    if i.Options.Vertical {rw, rh = rh, rw}
+    if i.ImageOptions.Portrait {w, h = h, w}
+    
     b := get_block_size(*i, w, rw)
 
     img := image.NewRGBA(image.Rectangle{image.Point{0,0},image.Point{w,h}})
-    
     fg := hex_to_rgb(i.ImageOptions.FG)
     bg := hex_to_rgb(i.ImageOptions.BG)
 
-    // set background first
+    // set background
     for x:=0; x<w; x++ {for y:=0; y<h; y++ {img.Set(x, y, bg)}}
 
     // set border
