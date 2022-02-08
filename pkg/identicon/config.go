@@ -43,19 +43,20 @@ func (o *Configuration) ReadConfiguration(path string) {
 
 
 type ImageConfiguration struct {
-    Size string
-    Save bool
-    Portrait bool
-    FG string
-    BG string
+    Size        string      `json:"image-size"`         // saves image with given resolution preset (S,M,L,X)
+    Save        bool        `json:"save"`               // save the identicon as an image with default image options
+    Portrait    bool        `json:"image-portrait"`     // saves image with portrait dimensions
+    FG          string      `json:"fg"`                 // sets image's foreground color
+    BG          string      `json:"bg"`                 // sets image's background color
 }
 
+// default configuration values for Identicon.ImageOptions
 var ImageDefaults = ImageConfiguration{
-    Size: "L",
-    Save: false,
-    Portrait: false,
-    FG: "6dff24",
-    BG: "0b2100",
+    Size:       "L",
+    Save:       false,
+    Portrait:   false,
+    FG:         "6dff24",
+    BG:         "0b2100",
 }
 
 func (io *ImageConfiguration) ReadConfiguration(path string) {

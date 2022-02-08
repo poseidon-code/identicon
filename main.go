@@ -10,6 +10,7 @@ import (
 
 func main() {
     // PARSING COMMANDLINE OPTIONS
+    // identicon configurations
     size_ptr        := flag.Int(    "size",         i.Defaults.Size,         "sets size of the identicon (range: 4-8)")
     square_ptr      := flag.Bool(   "square",       i.Defaults.Square,       "creates a square identicon")
     border_ptr      := flag.Bool(   "border",       i.Defaults.Border,       "adds a border to the identicon")
@@ -17,11 +18,12 @@ func main() {
     invert_ptr      := flag.Bool(   "invert",       i.Defaults.Invert,       "inverts the cell filling of identicon")
     symmetric_ptr   := flag.Bool(   "symmetric",    i.Defaults.Symmetric,    "creates symmetric identicon")
 
-    save_ptr := flag.Bool("save", false, "save the identicon as an image with default image options")
-    image_portrait_ptr := flag.Bool("image-portrait", i.ImageDefaults.Portrait, "saves image with portrait dimensions")
-    image_size_ptr := flag.String("image-size", i.ImageDefaults.Size, "saves image with given size (S,M,L,X)")
-    fg_ptr := flag.String("fg", i.ImageDefaults.FG, "image's foreground color")
-    bg_ptr := flag.String("bg", i.ImageDefaults.BG, "image's background color")
+    // image configurations
+    save_ptr            := flag.Bool(   "save",             i.ImageDefaults.Save,           "save the identicon as an image with default image options")
+    image_portrait_ptr  := flag.Bool(   "image-portrait",   i.ImageDefaults.Portrait,       "saves image with portrait dimensions")
+    image_size_ptr      := flag.String( "image-size",       i.ImageDefaults.Size,           "saves image with given resolution preset (S,M,L,X)")
+    fg_ptr              := flag.String( "fg",               i.ImageDefaults.FG,             "sets image's foreground color")
+    bg_ptr              := flag.String( "bg",               i.ImageDefaults.BG,             "sets image's background color")
 
     // if --config path is passed, ignore every other flags
     config_ptr := flag.String( "config", "", "path to config.json file")
