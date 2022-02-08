@@ -60,17 +60,27 @@ func hex_to_rgb(h string) color.Color {
     return color.RGBA{uint8(r), uint8(g), uint8(b), 255}
 }
 
-// TODO: fix block size for --square flag
+
 func get_block_size(i Identicon, w, rw int) int {
+    var b int
+    
     if i.ImageOptions.Portrait && i.Options.Vertical {
-        return w/rw/5
+        b = w/rw/5
     } else if i.Options.Vertical {
-        return w/rw/10
+        b = w/rw/10
     } else if i.ImageOptions.Portrait {
-        return w/rw/3
+        b = w/rw/3
     } else {
-        return w/rw/5
+        b = w/rw/5
     }
+
+    if i.Options.Square {
+        if !i.Options.Vertical {
+            b = w/rw/5
+        }
+    }
+
+    return b
 }
 
 
