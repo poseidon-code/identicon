@@ -17,18 +17,25 @@ var sl = size{2880, 1440}
 var sx = size{4320, 2160}
 
 func get_size(s string) (w int, h int) {
-    switch s {
-    case "S":
-        return ss.w, ss.h
-    case "M":
-        return sm.w, sm.h
-    case "L":
-        return sl.w, sl.h
-    case "X":
-        return sx.w, sx.h
-    default:
-        return sl.w, sl.h
+    if s=="S" || s=="M" || s=="L" || s=="X" {
+        switch s {
+        case "S":
+            return ss.w, ss.h
+        case "M":
+            return sm.w, sm.h
+        case "L":
+            return sl.w, sl.h
+        case "X":
+            return sx.w, sx.h
+        }
+    } else {
+        fmt.Println("Invalid --image-size value passed.") 
+        fmt.Println("--image-size value should be one of S, M, L & X.")
+        fmt.Println("i.e.: --image-size=X")
+        os.Exit(1)
     }
+
+    return -1, -1
 }
 
 func hex_to_rgb(h string) color.Color {
