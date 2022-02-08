@@ -101,5 +101,7 @@ func main() {
     // SAVING IMAGE
     if identicon.ImageOptions.Save {
         identicon.Save()
+    } else {
+        fmt.Println("To save image provide --save flag.")
     }
 }
