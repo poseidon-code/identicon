@@ -21,6 +21,7 @@ import "fmt"
 
 func (i *Identicon) Print() {
     w, h := (i.Width*i.Options.Size), (i.Height*i.Options.Size)
+    if i.Options.Vertical {w, h = h, w}
     m := i.Matrix
     
     if i.Options.Border {
