@@ -1,8 +1,14 @@
 {
-    "size": 4,
+    "size": 6,
     "square": true,
     "border": true,
     "vertical": false,
     "invert": false,
-    "symmetric": true
+    "symmetric": true,
+
+    "save": true,
+    "fg": "00c3ff",
+    "bg": "002530",
+    "image-size": "X",
+    "image-portrait": false
 }
