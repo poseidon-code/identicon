@@ -40,3 +40,27 @@ func (o *Configuration) ReadConfiguration(path string) {
     *o = Defaults
     json.Unmarshal(b, &o)
 }
+
+
+type ImageConfiguration struct {
+    Size string
+    Save bool
+    Portrait bool
+    FG string
+    BG string
+}
+
+var ImageDefaults = ImageConfiguration{
+    Size: "L",
+    Save: false,
+    Portrait: false,
+    FG: "6dff24",
+    BG: "0b2100",
+}
+
+func (io *ImageConfiguration) ReadConfiguration(path string) {
+    f, _ := os.Open(path); defer f.Close()
+    b, _ := ioutil.ReadAll(f)
+    *io = ImageDefaults
+    json.Unmarshal(b, &io)
+}

@@ -17,6 +17,12 @@ func main() {
     invert_ptr      := flag.Bool(   "invert",       i.Defaults.Invert,       "inverts the cell filling of identicon")
     symmetric_ptr   := flag.Bool(   "symmetric",    i.Defaults.Symmetric,    "creates symmetric identicon")
 
+    save_ptr := flag.Bool("save", false, "save the identicon as an image with default image options")
+    image_portrait_ptr := flag.Bool("image-portrait", i.ImageDefaults.Portrait, "saves image with portrait dimensions")
+    image_size_ptr := flag.String("image-size", i.ImageDefaults.Size, "saves image with given size (S,M,L,X)")
+    fg_ptr := flag.String("fg", i.ImageDefaults.FG, "image's foreground color")
+    bg_ptr := flag.String("bg", i.ImageDefaults.BG, "image's background color")
+
     // if --config path is passed, ignore every other flags
     config_ptr := flag.String( "config", "", "path to config.json file")
 
@@ -25,6 +31,7 @@ func main() {
 
     // SETTING OPTIONS
     var options i.Configuration
+    var image_options i.ImageConfiguration = i.ImageDefaults
     // handle json configs
     if len(*config_ptr)>0 {
         if flag.NFlag()>1 {
@@ -39,6 +46,7 @@ func main() {
         }
 
         options.ReadConfiguration(*config_ptr)
+        image_options.ReadConfiguration(*config_ptr)
     } else {
         // handle commandline options
         options = i.Configuration{
@@ -49,6 +57,16 @@ func main() {
             Invert:     *invert_ptr,
             Symmetric:  *symmetric_ptr,
         }
+
+        if *save_ptr {
+            image_options = i.ImageConfiguration{
+                Size: *image_size_ptr,
+                Save: *save_ptr,
+                Portrait: *image_portrait_ptr,
+                FG: *fg_ptr,
+                BG: *bg_ptr,
+            }
+        }
     }
 
 
@@ -56,7 +74,7 @@ func main() {
     var identicon i.Identicon
     // handling text
     if len(flag.Args())>1 {
-        fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags first before arguments. e.g.: \ngo-identicons --size 8 lovely")
+        fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags before argument. e.g.: \ngo-identicons --size=8 lovely")
         os.Exit(1)
     } else if len(flag.Args())==0 {
         fmt.Println("No argument passed for the text. Use like: \ngo-identicons lovely")
@@ -65,6 +83,7 @@ func main() {
         // setting Identicon
         identicon = i.Identicon{
             Options: options,
+            ImageOptions: image_options,
             Text: flag.Arg(0),
         }
     }
@@ -78,4 +97,9 @@ func main() {
 
     // PRINTING
     identicon.Print()
+
+    // SAVING IMAGE
+    if identicon.ImageOptions.Save {
+        identicon.Save()
+    }
 }

@@ -18,6 +18,7 @@ import (
 
 type Identicon struct {
     Options         Configuration
+    ImageOptions    ImageConfiguration
     Text            string
     Hash            string
     Width, Height   int
