@@ -102,6 +102,9 @@ func main() {
 
 
     // SAVING IMAGE
+    // checking if any other image related flags are passed except `--save`
+    // if so, then prompt user to pass `--save` flag also
+    // else, when no `--save` or any other image related flags are passed, then do nothing.
     other_image_flags := false
     handle_image_flags := func(f *flag.Flag){
         if f.Name=="image-portrait" || f.Name=="image-size" || f.Name=="fg" || f.Name=="bg" || f.Name=="save-dir" {
@@ -111,8 +114,10 @@ func main() {
     flag.Visit(handle_image_flags)
 
     if identicon.ImageOptions.Save {
+        // save image only when `--save` flag is passed
         identicon.Save()
     } else if other_image_flags {
+        // if any other image related flags are passed without `--save` flag
         fmt.Println("To save image provide --save flag.")
     }
 }
