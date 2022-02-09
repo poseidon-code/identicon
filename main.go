@@ -103,9 +103,17 @@ func main() {
     identicon.Print()
 
     // SAVING IMAGE
+    other_image_flags := false
+    handle_image_flags := func(f *flag.Flag){
+        if f.Name=="image-portrait" || f.Name=="image-size" || f.Name=="fg" || f.Name=="bg" || f.Name=="save-dir" {
+            other_image_flags = true
+        }
+    }
+    flag.Visit(handle_image_flags)
+
     if identicon.ImageOptions.Save {
         identicon.Save()
-    } else {
+    } else if other_image_flags {
         fmt.Println("To save image provide --save flag.")
     }
 }
