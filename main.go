@@ -24,6 +24,7 @@ func main() {
     image_size_ptr      := flag.String( "image-size",       i.ImageDefaults.Size,           "saves image with given resolution preset (S,M,L,X)")
     fg_ptr              := flag.String( "fg",               i.ImageDefaults.FG,             "sets image's foreground color")
     bg_ptr              := flag.String( "bg",               i.ImageDefaults.BG,             "sets image's background color")
+    save_dir_ptr        := flag.String( "save-dir",         i.ImageDefaults.SaveDir,        "saves image to the specified directory")
 
     // if --config path is passed, ignore every other flags
     config_ptr := flag.String( "config", "", "path to config.json file")
@@ -33,7 +34,7 @@ func main() {
 
     // SETTING OPTIONS
     var options i.Configuration
-    var image_options i.ImageConfiguration = i.ImageDefaults
+    var image_options i.ImageConfiguration
     // handle json configs
     if len(*config_ptr)>0 {
         if flag.NFlag()>1 {
@@ -64,6 +65,7 @@ func main() {
             image_options = i.ImageConfiguration{
                 Size: *image_size_ptr,
                 Save: *save_ptr,
+                SaveDir: *save_dir_ptr,
                 Portrait: *image_portrait_ptr,
                 FG: *fg_ptr,
                 BG: *bg_ptr,

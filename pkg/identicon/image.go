@@ -97,6 +97,19 @@ func get_block_size(i Identicon, w, rw int) int {
 }
 
 
+func handle_file_path(path, t string) string {
+    if _, err := os.Stat(path); err!=nil {
+        if os.IsNotExist(err) {
+            fmt.Println("Invalid save directory path. Directory doesn't exists.")
+            os.Exit(1)
+        }
+    }
+
+    sd := fmt.Sprintf("%s/%s.png", path, t)
+    return sd
+}
+
+
 func (i *Identicon) Save() {
     w, h := get_size(i.ImageOptions.Size)
     rw, rh := (i.Width*i.Options.Size), (i.Height*i.Options.Size)
@@ -149,6 +162,8 @@ func (i *Identicon) Save() {
         }
     }
 
-    f, _ := os.Create("image.png"); defer f.Close()
+
+    file_name := handle_file_path(i.ImageOptions.SaveDir, i.Text)
+    f, _ := os.Create(file_name); defer f.Close()
     png.Encode(f, img)
 }
