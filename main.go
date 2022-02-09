@@ -61,15 +61,13 @@ func main() {
             Symmetric:  *symmetric_ptr,
         }
 
-        if *save_ptr {
-            image_options = i.ImageConfiguration{
-                Size: *image_size_ptr,
-                Save: *save_ptr,
-                SaveDir: *save_dir_ptr,
-                Portrait: *image_portrait_ptr,
-                FG: *fg_ptr,
-                BG: *bg_ptr,
-            }
+        image_options = i.ImageConfiguration{
+            Size:       *image_size_ptr,
+            Save:       *save_ptr,
+            SaveDir:    *save_dir_ptr,
+            Portrait:   *image_portrait_ptr,
+            FG:         *fg_ptr,
+            BG:         *bg_ptr,
         }
     }
 
@@ -101,6 +99,7 @@ func main() {
 
     // PRINTING
     identicon.Print()
+
 
     // SAVING IMAGE
     other_image_flags := false
