@@ -39,8 +39,8 @@ func get_size(s string) (w int, h int) {
 }
 
 func hex_to_rgb(h string) color.Color {
-    if len(h)>6 {
-        fmt.Println("Color should be in HEX format (range: '000000' to 'ffffff')")
+    if len(h)!=6 {
+        fmt.Println("Color should be in HEX format of length 6 (range: '000000' to 'ffffff')")
         os.Exit(1)
     }
 
