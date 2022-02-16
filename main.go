@@ -5,54 +5,47 @@ import (
 	"fmt"
 	"os"
 
-	i "github.com/poseidon-code/go-identicons/pkg/identicon"
+	gi "github.com/poseidon-code/godenticon"
 )
 
 func main() {
     // PARSING COMMANDLINE OPTIONS
     // identicon configurations
-    size_ptr        := flag.Int(    "size",         i.Defaults.Size,         "sets size of the identicon (range: 4-8)")
-    square_ptr      := flag.Bool(   "square",       i.Defaults.Square,       "creates a square identicon")
-    border_ptr      := flag.Bool(   "border",       i.Defaults.Border,       "adds a border to the identicon")
-    vertical_ptr    := flag.Bool(   "vertical",     i.Defaults.Vertical,     "creates identicon in portrait dimension (not visible on using --square flag)")
-    invert_ptr      := flag.Bool(   "invert",       i.Defaults.Invert,       "inverts the cell filling of identicon")
-    symmetric_ptr   := flag.Bool(   "symmetric",    i.Defaults.Symmetric,    "creates symmetric identicon")
+    size_ptr        := flag.Int(    "size",         gi.IdenticonDefaultOptions.Size,         "sets size of the identicon (range: 4-8)")
+    square_ptr      := flag.Bool(   "square",       gi.IdenticonDefaultOptions.Square,       "creates a square identicon")
+    border_ptr      := flag.Bool(   "border",       gi.IdenticonDefaultOptions.Border,       "adds a border to the identicon")
+    vertical_ptr    := flag.Bool(   "vertical",     gi.IdenticonDefaultOptions.Vertical,     "creates identicon in portrait dimension (not visible on using --square flag)")
+    invert_ptr      := flag.Bool(   "invert",       gi.IdenticonDefaultOptions.Invert,       "inverts the cell filling of identicon")
+    symmetric_ptr   := flag.Bool(   "symmetric",    gi.IdenticonDefaultOptions.Symmetric,    "creates symmetric identicon")
 
     // image configurations
-    save_ptr            := flag.Bool(   "save",             i.ImageDefaults.Save,           "save the identicon as an image with default image options")
-    image_portrait_ptr  := flag.Bool(   "image-portrait",   i.ImageDefaults.Portrait,       "saves image with portrait dimensions")
-    image_size_ptr      := flag.String( "image-size",       i.ImageDefaults.Size,           "saves image with given resolution preset (S,M,L,X)")
-    fg_ptr              := flag.String( "fg",               i.ImageDefaults.FG,             "sets image's foreground color")
-    bg_ptr              := flag.String( "bg",               i.ImageDefaults.BG,             "sets image's background color")
-    save_dir_ptr        := flag.String( "save-dir",         i.ImageDefaults.SaveDir,        "saves image to the specified directory")
-
+    image_size_ptr      := flag.String( "image-size",       gi.ImageDefaultOptions.Size,           "saves image with given resolution preset (S,M,L,X)")
+    image_portrait_ptr  := flag.Bool(   "image-portrait",   gi.ImageDefaultOptions.Portrait,       "saves image with portrait dimensions")
+    fg_ptr              := flag.String( "fg",               gi.ImageDefaultOptions.FG,             "sets image's foreground color")
+    bg_ptr              := flag.String( "bg",               gi.ImageDefaultOptions.BG,             "sets image's background color")
+    
     // if --config path is passed, ignore every other flags
-    config_ptr := flag.String( "config", "", "path to config.json file")
+    config_ptr          := flag.String( "config",       "",         "path to config.json file")
+    save_ptr            := flag.Bool(   "save",         false,      "save the identicon as an image with default image options")
+    save_dir_ptr        := flag.String( "save-dir",     "",         "saves image to the specified directory")
 
     flag.Parse()
 
+    var identicon gi.Identicon
+
 
     // SETTING OPTIONS
-    var options i.Configuration
-    var image_options i.ImageConfiguration
+    var identicon_o gi.IdenticonConfiguration
+    var image_o gi.ImageConfiguration
     // handle json configs
     if len(*config_ptr)>0 {
         if flag.NFlag()>1 {
             fmt.Println("When --config is passed, all other options will be discarded.")
         }
-
-        if _, err := os.Stat(*config_ptr); err != nil {
-            if os.IsNotExist(err) {
-                fmt.Println("Invalid file path : ", *config_ptr)
-                os.Exit(1)
-            }
-        }
-
-        options.ReadConfiguration(*config_ptr)
-        image_options.ReadConfiguration(*config_ptr)
+        identicon.ReadConfiguration(*config_ptr)
     } else {
         // handle commandline options
-        options = i.Configuration{
+        identicon_o = gi.IdenticonConfiguration{
             Size:       *size_ptr,
             Square:     *square_ptr,
             Border:     *border_ptr,
@@ -61,10 +54,8 @@ func main() {
             Symmetric:  *symmetric_ptr,
         }
 
-        image_options = i.ImageConfiguration{
+        image_o = gi.ImageConfiguration{
             Size:       *image_size_ptr,
-            Save:       *save_ptr,
-            SaveDir:    *save_dir_ptr,
             Portrait:   *image_portrait_ptr,
             FG:         *fg_ptr,
             BG:         *bg_ptr,
@@ -73,7 +64,6 @@ func main() {
 
 
     // PARSING TEXT & SETTING IDENTICON
-    var identicon i.Identicon
     // handling text
     if len(flag.Args())>1 {
         fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags before argument. e.g.: \ngo-identicons --size=8 lovely")
@@ -83,16 +73,17 @@ func main() {
         os.Exit(1)
     } else {
         // setting Identicon
-        identicon = i.Identicon{
-            Options: options,
-            ImageOptions: image_options,
+        identicon = gi.Identicon{
+            IdenticonOptions: identicon_o,
+            ImageOptions: image_o,
             Text: flag.Arg(0),
         }
     }
 
-
+    
     // GENERATING IDENTICON
-    identicon.New()
+    identicon.GenerateHash()
+    identicon.GenerateMatrix()
     // variable `identicon` will now have all the required values for further 
     // operation on it, like printing or saving image, etc.
 
@@ -113,9 +104,9 @@ func main() {
     }
     flag.Visit(handle_image_flags)
 
-    if identicon.ImageOptions.Save {
+    if *save_ptr {
         // save image only when `--save` flag is passed
-        identicon.Save()
+        identicon.SaveImage(*save_dir_ptr)
     } else if other_image_flags {
         // if any other image related flags are passed without `--save` flag
         fmt.Println("To save image provide --save flag.")
