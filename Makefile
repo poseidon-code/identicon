@@ -1,4 +1,4 @@
-NAME=go-identicons
+NAME=identicon
 GITHUB_USERNAME=poseidon-code
 PROJECT=github.com/$(GITHUB_USERNAME)/$(NAME)
 MAIN=main.go
@@ -19,11 +19,6 @@ init:
 	@git init
 	@git checkout -b main
 	@printf "\033[32;1m»\033[0m Initialized (*main)\n"
-
-
-run:
-	@go run $(MAIN)
-
 
 
 build:
@@ -52,14 +47,3 @@ tidy:
 	@printf "\033[37;1m»\033[0m Tidying Up dependencies...\n"
 	@go mod tidy
 	@printf "\033[32;1m»\033[0m Finished\n"
-
-
-publish:
-	GOPROXY=proxy.golang.org go list -m $(PROJECT)
-
-
-purge:
-	@printf "\033[37;1m»\033[0m Purging everything (except Makefile)...\n"
-	@find * ! -name 'Makefile' -type d -exec rm -rfv {} +
-	@rm -rfv .git/
-	@printf "\033[32;1m»\033[0m Purged\n"
