@@ -30,11 +30,13 @@ build:
 compile:
 	@printf "\033[37;1m»\033[0m Compiling for linux, windows, macos with x64 & x86 architecture...\n"
 	GOOS=linux GOARCH=amd64 go build -o dist/$(NAME)-linux-amd64 $(MAIN)
-	GOOS=linux GOARCH=386 GO386=softfloat go build -o dist/$(NAME)-linux-386 $(MAIN)
 	GOOS=windows GOARCH=amd64 go build -o dist/$(NAME)-windows-amd64.exe $(MAIN)
-	GOOS=windows GOARCH=386 GO386=softfloat go build -o dist/$(NAME)-windows-386.exe $(MAIN)
 	GOOS=darwin GOARCH=amd64 go build -o dist/$(NAME)-darwin-amd64 $(MAIN)
 	@printf "\033[32;1m»\033[0m Compiled to 'dist/'\n"
+
+
+install:
+	go build -o /usr/bin/ $(PROJECT)
 
 
 clean:
