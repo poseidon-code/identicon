@@ -70,6 +70,7 @@ func main() {
 
         identicon.IdenticonOptions = identicon_o
         identicon.ImageOptions = image_o
+        identicon.CheckConfiguration()
     }
 
 
