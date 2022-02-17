@@ -46,7 +46,7 @@ func main() {
     // SETTING OPTIONS
     if is_flag_passed("config") {
         // handle json configs
-        if flag.NFlag()>1 {
+        if flag.NFlag()>1 && !is_flag_passed("save") {
             fmt.Println("When --config is passed, all other options will be discarded (except --save).")
         }
         identicon.ReadConfiguration(*config_ptr)
