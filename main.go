@@ -8,6 +8,14 @@ import (
 	gi "github.com/poseidon-code/godenticon"
 )
 
+func is_flag_passed(name string) bool {
+    found := false
+    flag.Visit(func(f *flag.Flag) {
+        if f.Name == name {found = true}
+    })
+    return found
+}
+
 func main() {
     // PARSING COMMANDLINE OPTIONS
     // identicon configurations
@@ -26,21 +34,20 @@ func main() {
     
     // if --config path is passed, ignore every other flags
     config_ptr          := flag.String( "config",       "",         "path to config.json file")
-    save_ptr            := flag.Bool(   "save",         false,      "save the identicon as an image with default image options")
-    save_dir_ptr        := flag.String( "save-dir",     "",         "saves image to the specified directory")
+    save_ptr            := flag.String( "save",         "",         "saves image to the specified directory")
 
     flag.Parse()
 
     var identicon gi.Identicon
+    var identicon_o gi.IdenticonConfiguration
+    var image_o gi.ImageConfiguration
 
 
     // SETTING OPTIONS
-    var identicon_o gi.IdenticonConfiguration
-    var image_o gi.ImageConfiguration
-    // handle json configs
-    if len(*config_ptr)>0 {
+    if is_flag_passed("config") {
+        // handle json configs
         if flag.NFlag()>1 {
-            fmt.Println("When --config is passed, all other options will be discarded.")
+            fmt.Println("When --config is passed, all other options will be discarded (except --save).")
         }
         identicon.ReadConfiguration(*config_ptr)
     } else {
@@ -60,27 +67,24 @@ func main() {
             FG:         *fg_ptr,
             BG:         *bg_ptr,
         }
+
+        identicon.IdenticonOptions = identicon_o
+        identicon.ImageOptions = image_o
     }
 
 
-    // PARSING TEXT & SETTING IDENTICON
+    // SETTING IDENTICON TEXT
     // handling text
     if len(flag.Args())>1 {
-        fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags before argument. e.g.: \ngo-identicons --size=8 lovely")
+        fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags before argument. e.g.: \nidenticon --size=8 lovely")
         os.Exit(1)
     } else if len(flag.Args())==0 {
-        fmt.Println("No argument passed for the text. Use like: \ngo-identicons lovely")
+        fmt.Println("No argument passed for the text. Use like: \nidenticon lovely")
         os.Exit(1)
-    } else {
-        // setting Identicon
-        identicon = gi.Identicon{
-            IdenticonOptions: identicon_o,
-            ImageOptions: image_o,
-            Text: flag.Arg(0),
-        }
     }
-
+    identicon.Text = flag.Arg(0)
     
+
     // GENERATING IDENTICON
     identicon.GenerateHash()
     identicon.GenerateMatrix()
@@ -92,23 +96,22 @@ func main() {
     identicon.Print()
 
 
-    // SAVING IMAGE
+    // SAVING IDENTICON IMAGE
     // checking if any other image related flags are passed except `--save`
     // if so, then prompt user to pass `--save` flag also
     // else, when no `--save` or any other image related flags are passed, then do nothing.
     other_image_flags := false
-    handle_image_flags := func(f *flag.Flag){
-        if f.Name=="image-portrait" || f.Name=="image-size" || f.Name=="fg" || f.Name=="bg" || f.Name=="save-dir" {
+    flag.Visit(func(f *flag.Flag){
+        if f.Name=="image-portrait" || f.Name=="image-size" || f.Name=="fg" || f.Name=="bg" {
             other_image_flags = true
         }
-    }
-    flag.Visit(handle_image_flags)
+    })
 
-    if *save_ptr {
+    if is_flag_passed("save") {
         // save image only when `--save` flag is passed
-        identicon.SaveImage(*save_dir_ptr)
+        identicon.SaveImage(*save_ptr)
     } else if other_image_flags {
         // if any other image related flags are passed without `--save` flag
-        fmt.Println("To save image provide --save flag.")
+        fmt.Println("To save image provide --save=<path> flag.")
     }
 }
