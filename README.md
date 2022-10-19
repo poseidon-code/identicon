@@ -1,27 +1,28 @@
 <div align="center">
 
-![identicon](./identicon.jpg)
+![identicon](./assets/identicon.jpg)
 <sup>This identicon was generated using the SHA512 hash of the [main.go](./main.go) file of this program.</sup>
 
 Cross-platform CLI program to generate identicons based on some string passed as arguement and save as a PNG image.
 
 ```sh
-identicon --config=./example-config.json --save=./example-image.png poseidon
+identicon --config=./assets/example-config.json --save=./assets/example-image.png poseidon
 ```
 
-![identicon-usage](./identicon-usage.jpg)
+![identicon-usage](./assets/identicon-usage.jpg)
 <sup>The config file in this usage example is [example-config.json](./example-config.json). The generated image using that config file is [example-image.png](./example-image.png)</sup>
 
 </div>
 
 # Table of Contents
 
-1. [Usage](#usage)
-2. [Prereqisites](#prerequisites)
-3. [Installing](#installing)
-4. [Releases](#releases)
-5. [Building](#building)
-6. [License](#license)
+- [Table of Contents](#table-of-contents)
+- [Usage](#usage)
+- [Prerequisites](#prerequisites)
+- [Installing](#installing)
+- [Releases](#releases)
+- [Building](#building)
+- [License](#license)
 
 # Usage
 
