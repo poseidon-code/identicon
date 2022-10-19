@@ -10,7 +10,7 @@ identicon --config=./assets/example-config.json --save=./assets/example-image.pn
 ```
 
 ![identicon-usage](./assets/identicon-usage.jpg)
-<sup>The config file in this usage example is [example-config.json](./example-config.json). The generated image using that config file is [example-image.png](./example-image.png)</sup>
+<sup>The config file in this usage example is [example-config.json](./assets/example-config.json). The generated image using that config file is [example-image.png](./assets/example-image.png)</sup>
 
 </div>
 
