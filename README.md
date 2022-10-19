@@ -20,6 +20,7 @@ identicon --config=./assets/example-config.json --save=./assets/example-image.pn
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
 - [Installing](#installing)
+- [Uninstalling](#uninstalling)
 - [Releases](#releases)
 - [Building](#building)
 - [License](#license)
@@ -72,6 +73,19 @@ _(assuming you are in a Linux/Unix-like OS, if you are on any other OS then foll
 git clone https://github.com/poseidon-code/identicon
 cd ./identicon
 sudo make install
+cd ..
+rm -rf ./identicon
+```
+
+# Uninstalling
+
+1. Go into the cloned/downloaded repository
+2. Use `sudo make uninstall` command to uninstall it globally. It will literally remove the binary from `/usr/bin/identicon`. _(if you are using any OS other than Linux you may not have `sudo` & `make` programs, for `sudo` consult your OS's guide to **raising user priveleges**, and for `make` you will need to install it from [here](https://www.gnu.org/software/make/), specific to your OS)_
+3. After uninstalling, you can delete the cloned/downloaded folder
+
+```sh
+cd ./identicon
+sudo make uninstall
 cd ..
 rm -rf ./identicon
 ```
