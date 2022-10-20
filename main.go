@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 
 	g "github.com/poseidon-code/godenticon"
 )
@@ -127,7 +129,18 @@ func main() {
 
     if is_flag_passed("save") {
         // save image only when `--save` flag is passed
-        identicon.SaveImage(*save_ptr)
+        _, fileName := filepath.Split(*save_ptr)
+        parts := strings.Split(fileName, ".")
+        extension := strings.ToLower(parts[len(parts)-1])
+
+        if extension == "png" {
+            identicon.SaveImage(*save_ptr)
+        } else if extension == "svg" {
+            identicon.SaveSVG(*save_ptr)
+        } else {
+            identicon.SaveImage(*save_ptr)
+            identicon.SaveSVG(*save_ptr)
+        }
     } else if other_image_flags {
         // if any other image related flags are passed without `--save` flag
         fmt.Println("To save image provide --save=<path> flag.")
