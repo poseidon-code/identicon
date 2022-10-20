@@ -3,7 +3,9 @@
 ![identicon](./assets/identicon.jpg)
 <sup>This identicon was generated using the SHA512 hash of the [main.go](./main.go) file of this program.</sup>
 
-Cross-platform CLI program to generate identicons based on some string passed as arguement and save as a PNG image.
+&bull; &bull; &bull;
+
+Cross-platform CLI program to generate identicons based on some string passed as arguement and save as a PNG image and as a SVG vector image.
 
 ```sh
 identicon --config=./assets/example-config.json --save=./assets/example-image.png poseidon
@@ -14,9 +16,8 @@ identicon --config=./assets/example-config.json --save=./assets/example-image.pn
 
 </div>
 
-# Table of Contents
+## Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
 - [Installing](#installing)
@@ -27,11 +28,16 @@ identicon --config=./assets/example-config.json --save=./assets/example-image.pn
 
 # Usage
 
-| GENERAL FLAGS     | USAGE                                  | EXAMPLE                                           |
-| ----------------- | -------------------------------------- | ------------------------------------------------- |
-| `-h`, `--help`    | list available options                 | `identicon -h`                                    |
-| `--config` _path_ | path to any supported config.json file | `identicon --config=./example-config.json <text>` |
-| `--save` _path_   | saves image to the specified directory | `identicon --save=./example-image.png <text>`     |
+| GENERAL FLAGS     | USAGE                                          | EXAMPLE                                           |
+| ----------------- | ---------------------------------------------- | ------------------------------------------------- |
+| `-h`, `--help`    | list available options                         | `identicon -h`                                    |
+| `--config` _path_ | path to any supported config.json file         | `identicon --config=./example-config.json <text>` |
+| `--save` _path_   | saves image to the specified directory         | `identicon --save=./example-image.png <text>`     |
+| `--hash`          | allows passing hash directly (instead of text) | `identicon --hash <hash>`                         |
+
+> **--save** : If file name is passed with a PNG extension _(filename.**png**)_, then only a PNG image will be saved.
+> If file name is passed with a SVG extension _(filename.**svg**)_, then only a SVG file will be saved.
+> If neither PNG nor SVG file name is passed then both the SVG & PNG images will be saved.
 
 | IDENTICON FLAGS   | USAGE                                                                          | EXAMPLE                        |
 | ----------------- | ------------------------------------------------------------------------------ | ------------------------------ |
@@ -51,7 +57,7 @@ identicon --config=./assets/example-config.json --save=./assets/example-image.pn
 
 # Prerequisites
 
--   [**go**](https://go.dev/) `>=1.17`
+-   [**go**](https://go.dev/) `>= 1.19`
 -   [**git**](https://git-scm.com/) `latest`
 -   [**make**](https://www.gnu.org/software/make/) `latest`
 
