@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	gi "github.com/poseidon-code/godenticon"
+	g "github.com/poseidon-code/godenticon"
 )
 
 func is_flag_passed(name string) bool {
@@ -19,40 +19,41 @@ func is_flag_passed(name string) bool {
 func main() {
     // PARSING COMMANDLINE OPTIONS
     // identicon configurations
-    size_ptr        := flag.Int(    "size",         gi.IdenticonDefaultOptions.Size,         "sets size of the identicon (range: 4-8)")
-    square_ptr      := flag.Bool(   "square",       gi.IdenticonDefaultOptions.Square,       "creates a square identicon")
-    border_ptr      := flag.Bool(   "border",       gi.IdenticonDefaultOptions.Border,       "adds a border to the identicon")
-    vertical_ptr    := flag.Bool(   "vertical",     gi.IdenticonDefaultOptions.Vertical,     "creates identicon in portrait dimension (not visible on using --square flag)")
-    invert_ptr      := flag.Bool(   "invert",       gi.IdenticonDefaultOptions.Invert,       "inverts the cell filling of identicon")
-    symmetric_ptr   := flag.Bool(   "symmetric",    gi.IdenticonDefaultOptions.Symmetric,    "creates symmetric identicon")
+    size_ptr        := flag.Int(    "size",         g.IdenticonDefaultOptions.Size,         "sets size of the identicon (range: 4-8)")
+    square_ptr      := flag.Bool(   "square",       g.IdenticonDefaultOptions.Square,       "creates a square identicon")
+    border_ptr      := flag.Bool(   "border",       g.IdenticonDefaultOptions.Border,       "adds a border to the identicon")
+    vertical_ptr    := flag.Bool(   "vertical",     g.IdenticonDefaultOptions.Vertical,     "creates identicon in portrait dimension (not visible on using --square flag)")
+    invert_ptr      := flag.Bool(   "invert",       g.IdenticonDefaultOptions.Invert,       "inverts the cell filling of identicon")
+    symmetric_ptr   := flag.Bool(   "symmetric",    g.IdenticonDefaultOptions.Symmetric,    "creates symmetric identicon")
 
     // image configurations
-    image_size_ptr      := flag.String( "image-size",       gi.ImageDefaultOptions.Size,           "saves image with given resolution preset (S,M,L,X)")
-    image_portrait_ptr  := flag.Bool(   "image-portrait",   gi.ImageDefaultOptions.Portrait,       "saves image with portrait dimensions")
-    fg_ptr              := flag.String( "fg",               gi.ImageDefaultOptions.FG,             "sets image's foreground color")
-    bg_ptr              := flag.String( "bg",               gi.ImageDefaultOptions.BG,             "sets image's background color")
+    image_size_ptr      := flag.String( "image-size",       g.ImageDefaultOptions.Size,           "saves image with given resolution preset (S,M,L,X)")
+    image_portrait_ptr  := flag.Bool(   "image-portrait",   g.ImageDefaultOptions.Portrait,       "saves image with portrait dimensions")
+    fg_ptr              := flag.String( "fg",               g.ImageDefaultOptions.FG,             "sets image's foreground color")
+    bg_ptr              := flag.String( "bg",               g.ImageDefaultOptions.BG,             "sets image's background color")
     
     // if --config path is passed, ignore every other flags
     config_ptr          := flag.String( "config",       "",         "path to config.json file")
     save_ptr            := flag.String( "save",         "",         "saves image to the specified directory")
+    hash_ptr            := flag.Bool(   "hash",         false,      "allows passing hash directly (instead of text)")
 
     flag.Parse()
 
-    var identicon gi.Identicon
-    var identicon_o gi.IdenticonConfiguration
-    var image_o gi.ImageConfiguration
+    var identicon g.Identicon
+    var identicon_o g.IdenticonConfiguration
+    var image_o g.ImageConfiguration
 
 
     // SETTING OPTIONS
     if is_flag_passed("config") {
         // handle json configs
         if flag.NFlag()>1 && !is_flag_passed("save") {
-            fmt.Println("When --config is passed, all other options will be discarded (except --save).")
+            fmt.Println("When --config is passed, all other CLI options will be discarded (except --save).")
         }
         identicon.ReadConfiguration(*config_ptr)
     } else {
         // handle commandline options
-        identicon_o = gi.IdenticonConfiguration{
+        identicon_o = g.IdenticonConfiguration{
             Size:       *size_ptr,
             Square:     *square_ptr,
             Border:     *border_ptr,
@@ -61,7 +62,7 @@ func main() {
             Symmetric:  *symmetric_ptr,
         }
 
-        image_o = gi.ImageConfiguration{
+        image_o = g.ImageConfiguration{
             Size:       *image_size_ptr,
             Portrait:   *image_portrait_ptr,
             FG:         *fg_ptr,
@@ -74,20 +75,35 @@ func main() {
     }
 
 
-    // SETTING IDENTICON TEXT
-    // handling text
+    // SETTING IDENTICON TEXT/HASH
+    // handling text/hash
     if len(flag.Args())>1 {
-        fmt.Println("Invalid sequence of flags & arguments passed. \nUse flags before argument. e.g.: \nidenticon --size=8 lovely")
+        fmt.Println(
+            "Invalid sequence of flags & arguments passed.",
+            "\nUse flags before argument. e.g.: ",
+            "\nidenticon --size=8 lovely",
+        )
+        fmt.Println(); flag.Usage()
         os.Exit(1)
     } else if len(flag.Args())==0 {
-        fmt.Println("No argument passed for the text. Use like: \nidenticon lovely")
+        fmt.Println(
+            "No argument passed for the text. Use like: ",
+            "\nidenticon lovely",
+        )
+        fmt.Println(); flag.Usage()
         os.Exit(1)
     }
-    identicon.Text = flag.Arg(0)
+
+    if *hash_ptr {
+        identicon.Hash = flag.Arg(0)
+        identicon.CheckHash()
+    } else {
+        identicon.Text = flag.Arg(0)
+        identicon.GenerateHash()
+    }
     
 
     // GENERATING IDENTICON
-    identicon.GenerateHash()
     identicon.GenerateMatrix()
     // variable `identicon` will now have all the required values for further 
     // operation on it, like printing or saving image, etc.
