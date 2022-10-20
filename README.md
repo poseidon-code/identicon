@@ -1,7 +1,7 @@
 <div align="center">
 
 ![identicon](./assets/identicon.jpg)
-<sup>This identicon was generated using the SHA512 hash of the [main.go](./main.go) file of this program.</sup>
+<sup>This identicon was generated using the SHA512 hash of the [main.go](./main.go) file of this program. [🐱 this](./assets/identicon.jpg)</sup>
 
 &bull; &bull; &bull;
 
