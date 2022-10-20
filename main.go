@@ -118,11 +118,12 @@ func main() {
     // if so, then prompt user to pass `--save` flag also
     // else, when no `--save` or any other image related flags are passed, then do nothing.
     other_image_flags := false
-    flag.Visit(func(f *flag.Flag){
-        if f.Name=="image-portrait" || f.Name=="image-size" || f.Name=="fg" || f.Name=="bg" {
+    for _, f := range []string{"image-portrait", "image-size", "fg", "bg"} {
+        if is_flag_passed(f) {
             other_image_flags = true
+            break
         }
-    })
+    }
 
     if is_flag_passed("save") {
         // save image only when `--save` flag is passed
